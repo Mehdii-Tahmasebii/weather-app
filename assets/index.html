@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Web</title>
+    <link rel="stylesheet" href="./style/output.css" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="./images/Dtafalonso-Win-10x-Weather.ico"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="text-slate-200 bg-neutral-900">
+    <!-- svgs -->
+    <svg>
+      <symbol
+        id="magnifying-glass"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+        />
+      </symbol>
+      <symbol
+        id="current-location"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+        <path d="M12 12m-8 0a8 8 0 1 0 16 0a8 8 0 1 0 -16 0" />
+        <path d="M12 2l0 2" />
+        <path d="M12 20l0 2" />
+        <path d="M20 12l2 0" />
+        <path d="M2 12l2 0" />
+      </symbol>
+      <symbol
+        id="map-pin"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+        />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+        />
+      </symbol>
+      <symbol
+      id="calendar"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+        />
+      </symbol>
+    </svg>
+
+    <!-- 
+    web header 
+    -->
+    <header class="fixed top-0 right-0 left-0 h-[124px] flex items-center">
+      <div
+        class="container flex items-center justify-between max-w-[1600px] w-[100%] px-4"
+      >
+        <!-- 
+        web icon 
+        -->
+        <a href="" class="">
+          <img src="./images/openweatherlogo.png" alt="logo" class="w-[68px]" />
+        </a>
+
+        <div class="relative">
+          <!-- 
+          search input 
+          -->
+          <div
+            class="flex items-center gap-1 rounded-4xl text-white text-xs/[40px] bg-white/10 px-1.5 py-1 w-96 h-12"
+          >
+            <div
+              data-search-btn
+              class="p-2.5 hover:bg-white/10 focus:bg-white/30 transition-colors rounded-full cursor-pointer"
+            >
+              <svg class="w-4 h-4">
+                <use href="#magnifying-glass"></use>
+              </svg>
+            </div>
+            <input
+             data-search-box
+              type="search"
+              autocomplete="off"
+              name="search"
+              placeholder="Search City..."
+              class="bg-transparent outline-none border-none h-full w-[90%]"
+            />
+
+            <!-- loading -->
+       
+          </div>
+
+          <!--
+             search result 
+              -->
+
+        </div>
+
+        <!-- 
+          location btn
+           -->
+
+        <button
+          class="text-zinc-700 flex items-center gap-2 bg-violet-300 px-3 h-10 rounded-4xl text-xs/[40px] font-semibold"
+          aria-label="close search"
+          data-current-locatin-btn
+        >
+          <svg class="w-4 h-4">
+            <use href="#current-location"></use>
+          </svg>
+          Current Location
+        </button>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-7 gap-9 max-w-[1600px] w-[100%] px-4">
+      <!-- 
+        side
+         -->
+      <aside data-aside-elem class="flex flex-col gap-5 col-span-2">
+        <div class="bg-white/5 rounded-3xl px-7 py-5 ">
+          <div class="border-b border-white/15 pb-5">
+
+
+            <h5 class="text-xl">Now</h5>
+
+            <!-- todays weather -->
+            <div class="flex items-center gap-x-10">
+              <div class="flex justify-center items-center">
+                <span class="text-[78px]" data-today-temp>5°</span>
+
+                <span class="-translate-y-1 text-5xl">c</span>
+              </div>
+              <img src="./images/weather_icons/03n.png" alt="weather" class="translate-y-1" />
+            </div>
+
+            <span class="" data-info>Broken Clouds</span>
+          </div>
+          <!-- ///todays weather -->
+          <!-- date and location -->
+          <div class="mt-5 font-semibold">
+            <p class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-white">
+                <use href="#calendar"></use>
+              </svg>
+              <span class="capitalize text-white/25" data-today-date
+                >Wendsday</span
+              >
+            </p>
+            <p class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-white">
+                <use href="#map-pin"></use>
+              </svg>
+              <span
+                class=" text-white/25"
+                data-current-location
+              >london GB</span>
+            </p>
+          </div>
+        </div>
+          <!--/// date and location -->
+        <!-- forcast -->
+        <h4 class="font-bold">5 Days Forcast</h4>
+        <div class="">
+          <div class="">
+            
+          </div>
+        </div>
+      </aside>
+      <!--
+       ///side
+        -->
+      <section class="col-span-5 bg-white/10 h-10"></section>
+    </main>
+
+    <script src="./script/app.js" type="module"></script>
+    <script src="./script/route.js" type="module"></script>
+  </body>
+</html>
