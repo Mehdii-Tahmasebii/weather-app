@@ -1,55 +1,77 @@
-import searchCity from "./api.js"
-import TodayWeather from '../components/TodayWeather/TodayWeather.js'
+import {currentWeatherInfo, currentLocation} from "./api.js";
 
-
-const $ = document
-const seachBoxInput = $.querySelector('[data-search-box]');
-const seachBoxInputBtn = $.querySelector('[data-search-btn]');
-const asideElem = $.querySelector('[data-aside-elem]');
-
-// elem defines
-window.customElements.define('today-weather-box', TodayWeather)
+const $ = document;
+const seachBoxInput = $.querySelector("[data-search-box]");
+const seachBoxInputBtn = $.querySelector("[data-search-btn]");
+const currentLocationBtn = $.querySelector("[data-current-locatin-btn]");
+const tempTodayElem = $.querySelector("[data-today-temp]");
+const todayCloudeIconElem = $.querySelector("[data-today-cloude]");
+const todayCloudeInfoElem = $.querySelector("[data-today-cloude-info]");
+const todayDateElem = $.querySelector("[data-today-date]");
+const currentCountryElem = $.querySelector("[data-country]");
+const currentCityElem = $.querySelector("[data-city]");
+const currentLocationErr = $.querySelector("[data-current-location-err]");
 
 // functions
-const weatherInfoHandler = async ()=>{
+const weatherInfoHandler = async (city) => {
+  let cityName = city;
+  let weatherInfo = await currentWeatherInfo(cityName);
+  console.log("🚀 ~ weatherInfoHandler ~ weatherInfo:", weatherInfo);
+  let weatherCloudsInfo = weatherInfo.weather[0];
 
-   let cityName = seachBoxInput.value.toLowerCase()
-   let weatherInfo = await searchCity(cityName)
-   console.log("🚀 ~ weatherInfoHandler ~ weatherInfo:", weatherInfo)
-   let weatherCloudsInfo = weatherInfo.weather[0];
+  let {
+    feels_like: feelsTemp,
+    grnd_level: groundLevel,
+    pressure,
+    temp,
+    temp_max: maxTemp,
+    temp_min: minTemp,
+  } = weatherInfo.main;
 
-   let { feels_like:feelsTemp, grnd_level:groundLevel, pressure, temp, temp_max:maxTemp, temp_min:minTemp } = weatherInfo.main
-  
+  todayWeatherHandler(
+    temp,
+    weatherInfo.name,
+    weatherInfo.sys.country,
+    weatherCloudsInfo.description,
+    weatherCloudsInfo.icon
+  );
+};
 
-
- 
-  
-   todayWeatherHandler(temp, weatherInfo.name, weatherInfo.sys.country, weatherCloudsInfo.description, weatherCloudsInfo.icon )
+const todayWeatherHandler = (temp, cityName, country, cloud, icon) => {
+  tempTodayElem.innerHTML = `${Math.floor(temp - 273.15)}°`;
+  todayCloudeIconElem.setAttribute("src", `./images/weather_icons/${icon}.png`);
+  todayCloudeInfoElem.innerHTML = cloud;
+  currentCountryElem.innerHTML = country;
+  currentCityElem.innerHTML = cityName;
+};
+const currentLocationHandler = () => {
+  const fail = () => {
+    currentLocationErr.classList.remove("-top-9");
+    currentLocationErr.classList.add("top-0");
+    setTimeout(() => {
+      currentLocationErr.classList.remove("top-0");
+      currentLocationErr.classList.add("-top-9");
+    }, 3000);
+  };
+  const success = (position) => {
+    console.log("🚀 ~ success ~ position:", position)
+    let lon = position.coords.longitude;
+    console.log("🚀 ~ success ~ lon:", lon)
+    let lat = position.coords.latitude;
+    console.log("🚀 ~ success ~ lat:", lat)
    
-   
-   
+     
+    
+    
+  };
+ navigator.geolocation.getCurrentPosition(success, fail, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
+};
 
-}
-
-const todayWeatherHandler = (temp, cityName, country, cloud, img )=>{
-   asideElem.insertAdjacentHTML('afterbegin',`
-      <today-weather-box>
-      
-      <h3 slot="today-temp">${temp}°</h3>
-      <sapn slaot="city-name">${cityName}</sapn>
-      <sapn slaot="country">${country}</sapn>
-      <span slot="today-cloud">${cloud}</span>
-      <img slot="today-img" src="./images/weather_icons/${img}.png" alt="weather" class="translate-y-1" />
-      
-      </today-weather-box>
-      `
-   )
-
-}
-
-
-
-seachBoxInputBtn.addEventListener('click', weatherInfoHandler)
-seachBoxInput.addEventListener('keypress', e => e.keyCode === 13 &&  weatherInfoHandler())
-
-
+seachBoxInputBtn.addEventListener("click", () =>
+  weatherInfoHandler(seachBoxInput.value)
+);
+seachBoxInput.addEventListener(
+  "keypress",
+  (e) => e.keyCode === 13 && weatherInfoHandler(e.target.value)
+);
+currentLocationBtn.addEventListener("click", currentLocationHandler);

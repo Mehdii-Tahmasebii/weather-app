@@ -73,7 +73,7 @@
         />
       </symbol>
       <symbol
-      id="calendar"
+        id="calendar"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -91,7 +91,7 @@
     <!-- 
     web header 
     -->
-    <header class="fixed top-0 right-0 left-0 h-[124px] flex items-center">
+    <header class="fixed top-0 right-0 left-0 h-[134px] flex items-center">
       <div
         class="container flex items-center justify-between max-w-[1600px] w-[100%] px-4"
       >
@@ -118,7 +118,7 @@
               </svg>
             </div>
             <input
-             data-search-box
+              data-search-box
               type="search"
               autocomplete="off"
               name="search"
@@ -127,13 +127,11 @@
             />
 
             <!-- loading -->
-       
           </div>
 
           <!--
              search result 
               -->
-
         </div>
 
         <!-- 
@@ -141,8 +139,9 @@
            -->
 
         <button
-          class="text-zinc-700 flex items-center gap-2 bg-violet-300 px-3 h-10 rounded-4xl text-xs/[40px] font-semibold"
+          class="text-zinc-700 flex items-center gap-2 bg-violet-300 px-3 h-10 rounded-4xl text-xs/[40px] font-semibold hover:bg-violet-600 hover:text-white transition-all"
           aria-label="close search"
+          
           data-current-locatin-btn
         >
           <svg class="w-4 h-4">
@@ -151,17 +150,20 @@
           Current Location
         </button>
       </div>
-    </header>
 
-    <main class="grid grid-cols-7 gap-9 max-w-[1600px] w-[100%] px-4">
+      <!-- err warning -->
+
+      <p data-current-location-err class="absolute right-0 left-0 -top-9 text-sm font-semibold capitalize bg-red-200 text-red-700 rounded-lg  w-full h-9 flex items-center px-3 transition-all">
+        we have failed to access the location
+      </p>
+    </header>
+    <main class="grid grid-cols-8 gap-9 max-w-[1600px] w-[100%] px-4">
       <!-- 
         side
          -->
-      <aside data-aside-elem class="flex flex-col gap-5 col-span-2">
-        <div class="bg-white/5 rounded-3xl px-7 py-5 ">
+      <aside data-aside-elem class="flex flex-col gap-5 col-span-2 shrink-0">
+        <div class="bg-white/5 rounded-3xl px-7 py-5 shrink-0">
           <div class="border-b border-white/15 pb-5">
-
-
             <h5 class="text-xl">Now</h5>
 
             <!-- todays weather -->
@@ -171,10 +173,15 @@
 
                 <span class="-translate-y-1 text-5xl">c</span>
               </div>
-              <img src="./images/weather_icons/03n.png" alt="weather" class="translate-y-1" />
+              <img
+                src="./images/weather_icons/03n.png"
+                alt="weather"
+                class="translate-y-1"
+                data-today-cloude
+              />
             </div>
 
-            <span class="" data-info>Broken Clouds</span>
+            <span class="capitalize" data-today-cloude-info>Broken Clouds</span>
           </div>
           <!-- ///todays weather -->
           <!-- date and location -->
@@ -191,26 +198,22 @@
               <svg class="w-5 h-5 text-white">
                 <use href="#map-pin"></use>
               </svg>
-              <span
-                class=" text-white/25"
-                data-current-location
-              >london GB</span>
+              <span class="capitalize text-white/25" data-city>london</span>
+              <span class="uppercase text-white/25" data-country>GB</span>
             </p>
           </div>
         </div>
-          <!--/// date and location -->
+        <!--/// date and location -->
         <!-- forcast -->
         <h4 class="font-bold">5 Days Forcast</h4>
         <div class="">
-          <div class="">
-            
-          </div>
+          <div class=""></div>
         </div>
       </aside>
       <!--
        ///side
         -->
-      <section class="col-span-5 bg-white/10 h-10"></section>
+      <section class="col-span-6 bg-white/5 rounded-3xl px-7 py-5"></section>
     </main>
 
     <script src="./script/app.js" type="module"></script>
