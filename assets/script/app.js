@@ -1,4 +1,4 @@
-import {currentWeatherInfo, currentLocation} from "./api.js";
+import { currentWeatherInfo, currentLocation } from "./api.js";
 
 const $ = document;
 const seachBoxInput = $.querySelector("[data-search-box]");
@@ -20,6 +20,7 @@ const weatherInfoHandler = async (city) => {
   let weatherCloudsInfo = weatherInfo.weather[0];
 
   let {
+    humidity,
     feels_like: feelsTemp,
     grnd_level: groundLevel,
     pressure,
@@ -45,7 +46,9 @@ const todayWeatherHandler = (temp, cityName, country, cloud, icon) => {
   currentCityElem.innerHTML = cityName;
 };
 const currentLocationHandler = () => {
-  const fail = () => {
+  // failed
+  const fail = (err) => {
+    console.log("🚀 ~ fail ~ err:", err);
     currentLocationErr.classList.remove("-top-9");
     currentLocationErr.classList.add("top-0");
     setTimeout(() => {
@@ -53,19 +56,27 @@ const currentLocationHandler = () => {
       currentLocationErr.classList.add("-top-9");
     }, 3000);
   };
-  const success = (position) => {
-    console.log("🚀 ~ success ~ position:", position)
+
+  // get current loc
+  const success =  (position) => {
     let lon = position.coords.longitude;
-    console.log("🚀 ~ success ~ lon:", lon)
     let lat = position.coords.latitude;
-    console.log("🚀 ~ success ~ lat:", lat)
-   
-     
-    
-    
+    geoToCityHandler(lat, lon)
+  
   };
- navigator.geolocation.getCurrentPosition(success, fail, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
+  navigator.geolocation.getCurrentPosition(success, fail, {
+    maximumAge: 60000,
+    timeout: 5000,
+    enableHighAccuracy: true,
+  });
 };
+
+const geoToCityHandler = async (lat, lon) => {
+   const currentLocationInfo =  await currentLocation(lat, lon);
+   const [cityInfo] = currentLocationInfo
+   weatherInfoHandler(cityInfo.name)
+   
+}
 
 seachBoxInputBtn.addEventListener("click", () =>
   weatherInfoHandler(seachBoxInput.value)
