@@ -9,13 +9,11 @@ module.exports = {
         padding: {
           DEFAULT: "1rem",
           lg: "0.625rem",
-        
         },
-      
       },
       boxShadow: {
-        boxShadow1: "0px 1px 3px hsla(0, 0%, 0%, 0.5)",
-        boxShadow2: "0px 3px 6px hsla(0, 0%, 0%, 0.4)",
+        boxShadow1: "#171717 0px 22px 70px 4px;",
+       
       },
       borderRadius: {
         "4xl": "28px",
