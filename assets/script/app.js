@@ -99,7 +99,6 @@ const weatherInfoHandler = async (city) => {
   preloading.classList.remove("flex");
   preloading.classList.add("hidden");
 };
-
 const todayWeatherHandler = (temp, cityName, country, cloud, icon) => {
   tempTodayElem.innerHTML = `${Math.floor(temp - 273.15)}°`;
   todayCloudeIconElem.setAttribute("src", `./images/weather_icons/${icon}.png`);
@@ -214,6 +213,7 @@ const dateHandler = () => {
 
   todayDateElem.innerHTML = `${day}, ${date} ${month} ${year}`;
 };
+
 // events
 seachBoxInputBtn.addEventListener("click", () =>
   weatherInfoHandler(seachBoxInput.value)
