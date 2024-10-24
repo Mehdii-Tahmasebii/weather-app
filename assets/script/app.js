@@ -7,13 +7,13 @@ import {
 
 const $ = document;
 const preloading = $.querySelector("[data-preloading-effect]");
-console.log("🚀 ~ preloading:", preloading)
+console.log("🚀 ~ preloading:", preloading);
 
 // search box
 const seachBoxInput = $.querySelector("[data-search-box]");
 const seachBoxInputBtn = $.querySelector("[data-search-btn]");
 
-// today Weather 
+// today Weather
 const currentLocationBtn = $.querySelector("[data-current-locatin-btn]");
 const tempTodayElem = $.querySelector("[data-today-temp]");
 const todayCloudeIconElem = $.querySelector("[data-today-cloude]");
@@ -44,12 +44,11 @@ let starterLocation = localStorage.getItem("lastLocation") || "tehran";
 
 // functions
 const weatherInfoHandler = async (city) => {
-
   localStorage.setItem("lastLocation", city);
-
+  seachBoxInput.value = "";
   // preloader
-  preloading.classList.remove('hidden')
-  preloading.classList.add('flex')
+  preloading.classList.remove("hidden");
+  preloading.classList.add("flex");
 
   // fetch city data
   let cityName = city;
@@ -59,7 +58,6 @@ const weatherInfoHandler = async (city) => {
     geoLocationInfo.lat,
     geoLocationInfo.lon
   );
-
 
   // deconstructing and organizing data
   const components = list[0].components;
@@ -95,12 +93,11 @@ const weatherInfoHandler = async (city) => {
     components.o3,
     airQI
   );
-  dateHandler()
+  dateHandler();
 
   // preloader
-  preloading.classList.remove('flex')
-  preloading.classList.add('hidden')
-
+  preloading.classList.remove("flex");
+  preloading.classList.add("hidden");
 };
 
 const todayWeatherHandler = (temp, cityName, country, cloud, icon) => {
@@ -184,17 +181,39 @@ const geoToCityHandler = async (lat, lon) => {
   weatherInfoHandler(cityInfo.name);
 };
 const dateHandler = () => {
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-  const todayDate = new Date()
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const weekdays = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  const todayDate = new Date();
 
-  const day = weekdays[todayDate.getDay()]
-  const month = months[todayDate.getMonth()]
-  const year = todayDate.getFullYear()
-  const date = todayDate.getDate()
+  // organizing
+  const day = weekdays[todayDate.getDay()];
+  const month = months[todayDate.getMonth()];
+  const year = todayDate.getFullYear();
+  const date = todayDate.getDate();
 
-  todayDateElem.innerHTML = `${day} ${date}, ${month} ${year}`
-}
+  todayDateElem.innerHTML = `${day}, ${date} ${month} ${year}`;
+};
 // events
 seachBoxInputBtn.addEventListener("click", () =>
   weatherInfoHandler(seachBoxInput.value)
