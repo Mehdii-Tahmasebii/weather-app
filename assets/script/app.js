@@ -22,7 +22,7 @@ const todayCloudeInfoElem = $.querySelector("[data-today-cloude-info]");
 const todayDateElem = $.querySelector("[data-today-date]");
 const currentCountryElem = $.querySelector("[data-country]");
 const currentCityElem = $.querySelector("[data-city]");
-const currentLocationErr = $.querySelector("[data-current-location-err]");
+
 
 // main section subs & sup
 const currentHumidity = $.querySelector("[data-humidity]");
@@ -123,6 +123,7 @@ const weatherInfoHandler = async (city) => {
     preloading.classList.remove("flex");
     preloading.classList.add("hidden");
     //  err
+    fetchErr.innerHTML = 'we have failed to reach server'
     fetchErr.classList.remove("-top-9");
     fetchErr.classList.add("top-0");
     setTimeout(() => {
@@ -188,11 +189,12 @@ const todayAirPollutionHandler = (pm, so2, no2, o3, airQI) => {
 const currentLocationHandler = () => {
   // failed
   const fail = (err) => {
-    currentLocationErr.classList.remove("-top-9");
-    currentLocationErr.classList.add("top-0");
+    fetchErr.innerHTML = 'we have failed to access the location'
+    fetchErr.classList.remove("-top-9");
+    fetchErr.classList.add("top-0");
     setTimeout(() => {
-      currentLocationErr.classList.remove("top-0");
-      currentLocationErr.classList.add("-top-9");
+      fetchErr.classList.remove("top-0");
+      fetchErr.classList.add("-top-9");
     }, 3000);
   };
 
@@ -230,13 +232,14 @@ const dateHandler = () => {
     "December",
   ];
   const weekdays = [
+    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
-    "Sunday",
+    
   ];
   const todayDate = new Date();
 
