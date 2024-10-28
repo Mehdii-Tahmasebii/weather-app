@@ -7,11 +7,12 @@ import {
 
 const $ = document;
 const preloading = $.querySelector("[data-preloading-effect]");
-console.log("🚀 ~ preloading:", preloading);
+const fetchErr = $.querySelector("[data-fetch-err]");
 
 // search box
 const seachBoxInput = $.querySelector("[data-search-box]");
 const seachBoxInputBtn = $.querySelector("[data-search-btn]");
+const seachBoxInvalidPlace = $.querySelector("[data-invalid-place-err]");
 
 // today Weather
 const currentLocationBtn = $.querySelector("[data-current-locatin-btn]");
@@ -51,54 +52,89 @@ const weatherInfoHandler = async (city) => {
   preloading.classList.add("flex");
 
   // fetch city data
-  let cityName = city;
-  let weatherInfo = await currentWeatherInfo(cityName);
-  const [geoLocationInfo] = await currentLocationByCity(city);
-  const { list } = await currentAirPollution(
-    geoLocationInfo.lat,
-    geoLocationInfo.lon
-  );
+  const cityName = city;
+  const weatherInfo = await currentWeatherInfo(cityName);
+  if (typeof weatherInfo === "number") {
+    // preloader
+    preloading.classList.remove("flex");
+    preloading.classList.add("hidden");
+    //  err
+    seachBoxInvalidPlace.classList.remove("opacity-0");
+    seachBoxInvalidPlace.classList.remove("invisible");
+    seachBoxInvalidPlace.classList.add("opacity-100");
+    seachBoxInvalidPlace.classList.add("visible");
 
-  // deconstructing and organizing data
-  const components = list[0].components;
-  const airQI = list[0].main.aqi;
-  let weatherCloudsInfo = weatherInfo.weather[0];
-  let { humidity, feels_like: feelsTemp, pressure, temp } = weatherInfo.main;
-  let { country, sunrise, sunset } = weatherInfo.sys;
-  let sunriseDate = new Date(sunrise * 1000);
-  let sunriseTime = `${sunriseDate.getHours()}:${sunriseDate.getMinutes()}`;
-  let sunsetDate = new Date(sunset * 1000);
-  let sunsetTime = `${sunsetDate.getHours()}:${sunsetDate.getMinutes()}`;
+    setTimeout(() => {
+      seachBoxInvalidPlace.classList.remove("opacity-100");
+      seachBoxInvalidPlace.classList.remove("visible");
+      seachBoxInvalidPlace.classList.add("opacity-0");
+      seachBoxInvalidPlace.classList.add("invisible");
+    }, 3000);
+  } else if (weatherInfo) {
+    localStorage.setItem("lastLocation", city);
+    const [geoLocationInfo] = await currentLocationByCity(city);
+    const { list } = await currentAirPollution(
+      geoLocationInfo.lat,
+      geoLocationInfo.lon
+    );
 
-  // calling back funcs
-  todayWeatherHandler(
-    temp,
-    weatherInfo.name,
-    country,
-    weatherCloudsInfo.description,
-    weatherCloudsInfo.icon
-  );
-  todayHighlightsHandler(
-    feelsTemp,
-    humidity,
-    pressure,
-    Math.floor(weatherInfo.visibility / 1000),
-    sunriseTime,
-    sunsetTime
-  );
-  todayAirPollutionHandler(
-    components.pm2_5,
-    components.so2,
-    components.no2,
-    components.o3,
-    airQI
-  );
-  dateHandler();
+    // deconstructing and organizing data
+    const components = list[0].components;
+    const airQI = list[0].main.aqi;
+    let weatherCloudsInfo = weatherInfo.weather[0];
+    let { humidity, feels_like: feelsTemp, pressure, temp } = weatherInfo.main;
+    let { country, sunrise, sunset } = weatherInfo.sys;
+    let sunriseDate = new Date(sunrise * 1000);
+    let sunriseTime = `${sunriseDate.getHours()}:${sunriseDate.getMinutes()}`;
+    let sunsetDate = new Date(sunset * 1000);
+    let sunsetTime = `${sunsetDate.getHours()}:${sunsetDate.getMinutes()}`;
 
-  // preloader
-  preloading.classList.remove("flex");
-  preloading.classList.add("hidden");
+    // calling back funcs
+    todayWeatherHandler(
+      temp,
+      weatherInfo.name,
+      country,
+      weatherCloudsInfo.description,
+      weatherCloudsInfo.icon
+    );
+    todayHighlightsHandler(
+      feelsTemp,
+      humidity,
+      pressure,
+      Math.floor(weatherInfo.visibility / 1000),
+      sunriseTime,
+      sunsetTime
+    );
+    todayAirPollutionHandler(
+      components.pm2_5,
+      components.so2,
+      components.no2,
+      components.o3,
+      airQI
+    );
+    dateHandler();
+
+    // preloader
+    preloading.classList.remove("flex");
+    preloading.classList.add("hidden");
+  } else if (!weatherInfo) {
+    localStorage.setItem("lastLocation", city);
+    // preloader
+    preloading.classList.remove("flex");
+    preloading.classList.add("hidden");
+    //  err
+    fetchErr.classList.remove("-top-9");
+    fetchErr.classList.add("top-0");
+    setTimeout(() => {
+      fetchErr.classList.remove("top-0");
+      fetchErr.classList.add("-top-9");
+    }, 3000);
+  } 
+
+
+  //!!weatherInfoHandler
 };
+
 const todayWeatherHandler = (temp, cityName, country, cloud, icon) => {
   tempTodayElem.innerHTML = `${Math.floor(temp - 273.15)}°`;
   todayCloudeIconElem.setAttribute("src", `./images/weather_icons/${icon}.png`);
@@ -152,7 +188,6 @@ const todayAirPollutionHandler = (pm, so2, no2, o3, airQI) => {
 const currentLocationHandler = () => {
   // failed
   const fail = (err) => {
-    console.log("🚀 ~ fail ~ err:", err);
     currentLocationErr.classList.remove("-top-9");
     currentLocationErr.classList.add("top-0");
     setTimeout(() => {

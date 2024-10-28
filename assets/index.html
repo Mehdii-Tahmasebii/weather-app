@@ -228,19 +228,16 @@
       <div
         class="container flex items-center justify-between max-w-[1600px] w-[100%] px-4"
       >
-        <!-- 
-        web icon 
-        -->
-        <a href="" class="">
+        <!-- web icon -->
+        <a href="#" class="">
           <img src="./images/openweatherlogo.png" alt="logo" class="w-[68px]" />
         </a>
 
+        <!-- search box -->
         <div class="relative">
-          <!-- 
-          search input 
-          -->
+          <!--  search input  -->
           <div
-            class="flex items-center gap-1 rounded-4xl text-white text-xs/[40px] bg-white/10 px-1.5 py-1 w-96 h-12"
+            class="reletive flex items-center gap-1 rounded-4xl text-white text-xs/[40px] bg-white/10 px-1.5 py-1 w-96 h-12"
           >
             <div
               data-search-btn
@@ -259,17 +256,18 @@
               class="bg-transparent outline-none border-none h-full w-[90%]"
             />
 
-            <!-- loading -->
+            <p
+              data-invalid-place-err
+              class="absolute right-0 left-0 -bottom-[46px] text-xs font-semibold capitalize bg-red-200 text-red-700 rounded-lg w-full h-9 flex items-center px-3 opacity-0 invisible transition-all"
+            >
+              please enter valid locations
+            </p>
           </div>
 
-          <!--
-             search result 
-              -->
+          <!--search result -->
         </div>
 
-        <!-- 
-          location btn
-           -->
+        <!-- location btn -->
 
         <button
           class="text-zinc-700 flex items-center gap-2 bg-violet-300 px-3 h-10 rounded-4xl text-xs/[40px] font-semibold hover:bg-violet-600 hover:text-white transition-all"
@@ -290,6 +288,12 @@
         class="absolute right-0 left-0 -top-9 text-sm font-semibold capitalize bg-red-200 text-red-700 rounded-lg w-full h-9 flex items-center px-3 transition-all"
       >
         we have failed to access the location
+      </p>
+      <p
+        data-fetch-err
+        class="absolute right-0 left-0 -top-9 text-sm font-semibold capitalize bg-red-200 text-red-700 rounded-lg w-full h-9 flex items-center px-3 transition-all"
+      >
+        we have failed to reach server
       </p>
     </header>
 
